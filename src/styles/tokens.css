@@ -1,0 +1,58 @@
+/* Design tokens, taken from docs/prototype. Dark theme only for now. */
+:root {
+  color-scheme: dark;
+
+  /* Surfaces */
+  --bg: #161513;
+  --bg-sunken: #0e0d0c;
+  --surface: #1b1a17;
+  --surface-hover: #201f1c;
+  --surface-raised: #22211d;
+  --border: #34322c;
+  --border-subtle: #2c2a25;
+  --border-strong: #45423a;
+
+  /* Text */
+  --text: #ece8de;
+  --text-soft: #d9d4c8;
+  --text-muted: #b7b2a5;
+  --text-faint: #9a9588;
+  --text-disabled: #6e6a60;
+
+  /* Accent (green) */
+  --accent: #8fd1a8;
+  --accent-link: #7cc49c;
+  --accent-strong: #3e8a63;
+  --accent-bg: #1e2e24;
+  --accent-bg-strong: #24452f;
+
+  /* Status */
+  --warn: #e2b66a;
+  --warn-strong: #b88a3a;
+  --warn-bg: #332815;
+  --danger: #e8875f;
+  --danger-strong: #e07a4e;
+  --danger-bg: #2e211b;
+  --info-bg: #1f2a33;
+
+  /* Type */
+  --font-sans: "Schibsted Grotesk", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --text-xs: 11px;
+  --text-sm: 13px;
+  --text-md: 14px;
+  --text-lg: 17px;
+  --text-xl: 22px;
+
+  /* Shape + spacing */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 28px;
+
+  --sidebar-width: 208px;
+}
