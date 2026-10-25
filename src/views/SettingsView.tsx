@@ -1,8 +1,14 @@
+import { useEffect } from "react";
 import type { AppInfo } from "../bindings/AppInfo";
+import { AiPanel } from "../components/AiPanel";
+import { AlertsPanel } from "../components/AlertsPanel";
+import { DataPanel } from "../components/DataPanel";
 import { Icon } from "../components/Icon";
 import { SaveIndicator } from "../components/SaveIndicator";
 import { SearchForm } from "../components/SearchForm";
-import { formatBytes, formatShortDate } from "../lib/format";
+import { SearchPicker } from "../components/SearchPicker";
+import { SourcesPanel } from "../components/SourcesPanel";
+import { formatShortDate } from "../lib/format";
 import { plural, profileCounts } from "../lib/profile";
 import type { AppData } from "../lib/useAppData";
 import { ViewHeader } from "./ViewHeader";
@@ -12,11 +18,17 @@ type SettingsViewProps = {
   data: AppData;
   onEditProfile: () => void;
   onRunSetup: () => void;
+  /** Section to scroll to when the view opens. */
+  focus?: "sources" | "privacy" | null;
 };
 
-export function SettingsView({ info, data, onEditProfile, onRunSetup }: SettingsViewProps) {
+export function SettingsView({ info, data, onEditProfile, onRunSetup, focus }: SettingsViewProps) {
   const resume = data.stored?.resume;
   const counts = profileCounts(data.profile);
+
+  useEffect(() => {
+    if (focus) document.getElementById(`settings-${focus}`)?.scrollIntoView?.({ block: "start" });
+  }, [focus]);
 
   return (
     <section className="view">
@@ -32,8 +44,15 @@ export function SettingsView({ info, data, onEditProfile, onRunSetup }: Settings
             Search
           </h2>
           <p className="panel-sub">What the job feed looks for.</p>
+          <SearchPicker data={data} />
           <SearchForm value={data.search} onChange={data.updateSearch} />
         </div>
+
+        <SourcesPanel />
+
+        <AlertsPanel />
+
+        <AiPanel />
 
         <div className="panel">
           <h2>
@@ -64,27 +83,7 @@ export function SettingsView({ info, data, onEditProfile, onRunSetup }: Settings
           </div>
         </div>
 
-        <div className="panel">
-          <h2>
-            <Icon name="hard_drive" />
-            Your data
-          </h2>
-          <p className="panel-sub">Your resume, jobs, letters and history stay on this computer.</p>
-          {info ? (
-            <dl className="kv">
-              <dt>Stored at</dt>
-              <dd>{info.dbPath}</dd>
-              <dt>Size</dt>
-              <dd>{formatBytes(info.dbSizeBytes)}</dd>
-              <dt>Schema</dt>
-              <dd>v{info.schemaVersion}</dd>
-              <dt>App version</dt>
-              <dd>{info.version}</dd>
-            </dl>
-          ) : (
-            <p className="panel-sub">Loading…</p>
-          )}
-        </div>
+        <DataPanel info={info} />
       </div>
     </section>
   );

@@ -1,5 +1,5 @@
 mod extract;
-mod parse;
+pub(crate) mod parse;
 
 use crate::{error::AppResult, profile::Profile};
 

@@ -1,19 +1,23 @@
-//! Reads and writes for the single-row profile/search tables and app settings.
+//! Reads and writes for the single-row profile table, the active search and app settings.
 
 use rusqlite::{Connection, OptionalExtension, params};
 
 use crate::{
+    ai::AiSettings,
     error::{AppError, AppResult},
+    jobs::Weights,
     profile::{Profile, ResumeMeta, SearchSettings, SetupStatus, StoredProfile},
 };
 
 const SETUP_STATUS_KEY: &str = "setup_status";
+const WEIGHTS_KEY: &str = "match_weights";
+const AI_KEY: &str = "ai";
 
-fn to_json<T: serde::Serialize>(value: &T) -> AppResult<String> {
+pub(crate) fn to_json<T: serde::Serialize>(value: &T) -> AppResult<String> {
     serde_json::to_string(value).map_err(|e| AppError::Other(e.to_string()))
 }
 
-fn from_json<T: serde::de::DeserializeOwned>(s: &str) -> AppResult<T> {
+pub(crate) fn from_json<T: serde::de::DeserializeOwned>(s: &str) -> AppResult<T> {
     serde_json::from_str(s).map_err(|e| AppError::Other(format!("stored data is unreadable: {e}")))
 }
 
@@ -99,27 +103,16 @@ pub fn save_import(
     Ok(())
 }
 
+/// The active search's settings.
 pub fn get_search_settings(conn: &Connection) -> AppResult<SearchSettings> {
-    let data: Option<String> = conn
-        .query_row("SELECT data FROM search_settings WHERE id = 1", [], |r| {
-            r.get(0)
-        })
-        .optional()?;
-    data.map_or_else(|| Ok(SearchSettings::default()), |d| from_json(&d))
+    crate::searches::active(conn)
 }
 
 pub fn save_search_settings(conn: &Connection, settings: &SearchSettings) -> AppResult<()> {
-    conn.execute(
-        "INSERT INTO search_settings (id, data) VALUES (1, ?1)
-         ON CONFLICT (id) DO UPDATE SET
-            data = excluded.data,
-            updated_at = strftime('%Y-%m-%dT%H:%M:%SZ', 'now')",
-        params![to_json(settings)?],
-    )?;
-    Ok(())
+    crate::searches::save_active(conn, settings)
 }
 
-fn get_setting<T: serde::de::DeserializeOwned>(
+pub(crate) fn get_setting<T: serde::de::DeserializeOwned>(
     conn: &Connection,
     key: &str,
 ) -> AppResult<Option<T>> {
@@ -131,7 +124,11 @@ fn get_setting<T: serde::de::DeserializeOwned>(
     value.map(|v| from_json(&v)).transpose()
 }
 
-fn set_setting<T: serde::Serialize>(conn: &Connection, key: &str, value: &T) -> AppResult<()> {
+pub(crate) fn set_setting<T: serde::Serialize>(
+    conn: &Connection,
+    key: &str,
+    value: &T,
+) -> AppResult<()> {
     conn.execute(
         "INSERT INTO settings (key, value) VALUES (?1, ?2)
          ON CONFLICT (key) DO UPDATE SET
@@ -148,6 +145,23 @@ pub fn get_setup_status(conn: &Connection) -> AppResult<SetupStatus> {
 
 pub fn set_setup_status(conn: &Connection, status: SetupStatus) -> AppResult<()> {
     set_setting(conn, SETUP_STATUS_KEY, &status)
+}
+
+pub fn get_weights(conn: &Connection) -> AppResult<Weights> {
+    Ok(get_setting(conn, WEIGHTS_KEY)?.unwrap_or_default())
+}
+
+pub fn save_weights(conn: &Connection, weights: &Weights) -> AppResult<()> {
+    set_setting(conn, WEIGHTS_KEY, weights)
+}
+
+/// AI is off until the user picks a provider and agrees to what gets sent.
+pub fn get_ai_settings(conn: &Connection) -> AppResult<AiSettings> {
+    Ok(get_setting(conn, AI_KEY)?.unwrap_or_default())
+}
+
+pub fn save_ai_settings(conn: &Connection, settings: &AiSettings) -> AppResult<()> {
+    set_setting(conn, AI_KEY, settings)
 }
 
 #[cfg(test)]

@@ -170,6 +170,20 @@ fn heading(line: &str) -> Option<Section> {
     })
 }
 
+/// The section a line heads, e.g. "Experience", when it's a heading we recognise.
+pub fn section_heading(line: &str) -> Option<&'static str> {
+    Some(match heading(line.trim())? {
+        Section::Summary => "Summary",
+        Section::Experience => "Experience",
+        Section::Skills => "Skills",
+        Section::Education => "Education",
+        Section::Projects => "Projects",
+        Section::Languages => "Languages",
+        Section::Certifications => "Certifications",
+        Section::Other => "Other",
+    })
+}
+
 /// Splits raw extracted text into the clean, non-empty lines the profile cites by index.
 pub fn to_lines(text: &str) -> Vec<String> {
     static WIDE_GAP: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\t+| {3,}").unwrap());

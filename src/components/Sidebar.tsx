@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import type { AiSettings } from "../bindings/AiSettings";
+import { ipc } from "../lib/ipc";
 import { NAV_ITEMS, type ViewId } from "../lib/nav";
 import { Icon } from "./Icon";
 
@@ -9,6 +12,16 @@ type SidebarProps = {
 };
 
 export function Sidebar({ view, version, onNavigate, onQuickSetup }: SidebarProps) {
+  const [ai, setAi] = useState<AiSettings | null>(null);
+
+  // AI can be switched in Settings; check again whenever the view changes.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: re-read on navigation
+  useEffect(() => {
+    ipc.getAiSettings().then(setAi, () => {});
+  }, [view]);
+  const aiLabel =
+    ai?.provider === "claude" ? "Claude Code" : ai?.provider === "codex" ? "Codex" : null;
+
   return (
     <aside className="sidebar">
       <div className="brand">
@@ -50,10 +63,10 @@ export function Sidebar({ view, version, onNavigate, onQuickSetup }: SidebarProp
           </span>
         </button>
         <div className="privacy-row">
-          <span className="status-dot" />
+          <span className="status-dot" data-on={aiLabel !== null} />
           <span className="privacy-row-text">
-            <span className="privacy-row-title">AI off</span>
-            <span className="privacy-row-sub mono">Rules only</span>
+            <span className="privacy-row-title">{aiLabel ? "AI on" : "AI off"}</span>
+            <span className="privacy-row-sub mono">{aiLabel ?? "Rules only"}</span>
           </span>
         </div>
       </div>

@@ -60,6 +60,8 @@ jobs:
             bundles: app,dmg
           - os: ubuntu-22.04
             bundles: appimage,deb
+          - os: windows-latest
+            bundles: nsis
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -81,6 +83,9 @@ jobs:
           workspaces: src-tauri
 
       - run: pnpm install --frozen-lockfile
+      # The check job covers macOS and Linux; run the tests here for Windows.
+      - if: runner.os == 'Windows'
+        run: pnpm test && pnpm test:rust
       - run: pnpm tauri build --bundles ${{ matrix.bundles }}
 
       - uses: actions/upload-artifact@v4

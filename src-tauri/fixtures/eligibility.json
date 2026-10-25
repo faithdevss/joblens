@@ -1,0 +1,616 @@
+[
+ {
+  "note": "remotive worldwide",
+  "location": "Worldwide",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "wwr anywhere",
+  "location": "Anywhere in the World",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "wwr usa only",
+  "location": "USA Only",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted",
+  "note_contains": "You can’t apply from Portugal"
+ },
+ {
+  "note": "wwr usa only, us user",
+  "location": "USA Only",
+  "text": "",
+  "country": "US",
+  "timezone": "UTC-05:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "wwr emea only",
+  "location": "EMEA Only",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "wwr emea only, brazil",
+  "location": "EMEA Only",
+  "text": "",
+  "country": "BR",
+  "timezone": "UTC-03:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "wwr americas",
+  "location": "Remote - Americas",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "wwr americas, mexico",
+  "location": "Remote - Americas",
+  "text": "",
+  "country": "MX",
+  "timezone": "UTC-06:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "wwr city only",
+  "location": "Helsinki",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "not_stated",
+  "note_contains": "Helsinki"
+ },
+ {
+  "note": "wwr country list w/ flags",
+  "location": "🇦🇩 Andorra, 🇦🇱 Albania, 🇦🇹 Austria, 🇩🇪 Germany, 🇵🇹 Portugal, and 🇺🇦 Ukraine",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "wwr country list w/o user",
+  "location": "🇨🇦 Canada and 🇫🇷 France",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "wwr long name",
+  "location": "🇬🇧 United Kingdom of Great Britain and Northern Ireland, 🇸🇬 Singapore, and 🇺🇸 United States of America",
+  "text": "",
+  "country": "GB",
+  "timezone": "UTC+00:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "remotive usa canada timezones",
+  "location": "USA, Canada, USA timezones",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "remotive usa canada timezones, canadian",
+  "location": "USA, Canada, USA timezones",
+  "text": "",
+  "country": "CA",
+  "timezone": "UTC-05:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "remotive canada but wrong tz",
+  "location": "USA, Canada, USA timezones",
+  "text": "",
+  "country": "CA",
+  "timezone": "UTC+01:00",
+  "expect": "restricted",
+  "note_contains": "working hours"
+ },
+ {
+  "note": "remotive europe usa apac",
+  "location": "Europe, USA, Canada, APAC",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "remotive europe usa apac, india",
+  "location": "Europe, USA, Canada, APAC",
+  "text": "",
+  "country": "IN",
+  "timezone": "UTC+05:30",
+  "expect": "eligible"
+ },
+ {
+  "note": "remotive europe usa apac, brazil",
+  "location": "Europe, USA, Canada, APAC",
+  "text": "",
+  "country": "BR",
+  "timezone": "UTC-03:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "remotive long list",
+  "location": "Europe, USA, UK, Canada, Australia, Ireland, Switzerland, Singapore, Mexico, Iceland, Norway",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "remoteok remote us",
+  "location": "Remote - US",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "remoteok us home office",
+  "location": "Your Remote US Home Office",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "remoteok partial list",
+  "location": "US, UK, Canada, Australia + 35 other countries",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "not_stated",
+  "note_contains": "Check the posting"
+ },
+ {
+  "note": "remoteok partial list includes user",
+  "location": "US, UK, Canada, Australia + 35 other countries",
+  "text": "",
+  "country": "AU",
+  "timezone": "UTC+10:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "remoteok bare remote",
+  "location": "Remote",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "not_stated"
+ },
+ {
+  "note": "remoteok empty",
+  "location": "",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "not_stated"
+ },
+ {
+  "note": "remoteok us city",
+  "location": "Sterling Heights, Michigan",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "remoteok state code",
+  "location": "SIHO - Columbus, IN",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "remoteok canada city",
+  "location": "Vancouver, BC, Canada",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "remoteok mojibake mexico",
+  "location": "Ciudad de México, Mexico",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "remoteok city no country",
+  "location": "Copenhagen",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "not_stated"
+ },
+ {
+  "note": "greenhouse remote france",
+  "location": "Remote, France",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "greenhouse remote france, french user",
+  "location": "Remote, France",
+  "text": "",
+  "country": "FR",
+  "timezone": "UTC+01:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "greenhouse multi",
+  "location": "Remote Ireland; Remote, France; Remote, Spain; Remote, United Kingdom",
+  "text": "",
+  "country": "ES",
+  "timezone": "UTC+01:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "greenhouse multi without user",
+  "location": "Remote Ireland; Remote, United Kingdom",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "greenhouse remote ksa uae",
+  "location": "Remote, KSA; Remote, UAE",
+  "text": "",
+  "country": "AE",
+  "timezone": "UTC+04:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "ashby eu",
+  "location": "Remote - European Union",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "ashby eu, uk user",
+  "location": "Remote - European Union",
+  "text": "",
+  "country": "GB",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "lever remote nyc",
+  "location": "New York, NY",
+  "text": "",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "open to candidates based in argentina",
+  "location": "",
+  "text": "Work from anywhere – this position is open to candidates based in Argentina.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "open to candidates based in the us",
+  "location": "",
+  "text": "This is a remote position, and we are open to candidates based in the United States.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "must be eligible to live and work in the us",
+  "location": "",
+  "text": "Applicants must be eligible to live and work in the US.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "authorized to work in us",
+  "location": "",
+  "text": "Candidates must be authorized to work in the United States without current or future employer sponsorship.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "only hire in canada",
+  "location": "",
+  "text": "PLEASE NOTE: At this time, we are only able to hire candidates who are legally eligible to work in Canada and reside within Canada.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "anywhere in us or canada",
+  "location": "",
+  "text": "This is a remote position that can be located anywhere in the US or Canada.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "anywhere in us or canada, canadian",
+  "location": "",
+  "text": "This is a remote position that can be located anywhere in the US or Canada.",
+  "country": "CA",
+  "timezone": "UTC-05:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "work from anywhere in philippines",
+  "location": "",
+  "text": "100% Remote Work – Work from anywhere in the Philippines.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "role based in nz",
+  "location": "",
+  "text": "This role is based in New Zealand, candidates must hold the relevant right to work in NZ.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "nearshore mexico brazil",
+  "location": "",
+  "text": "This is a nearshore delivery role, based in Mexico or Brazil, working in a remote-first model.",
+  "country": "BR",
+  "timezone": "UTC-03:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "location line",
+  "location": "",
+  "text": "Position Type : Full-time\nLocation: Philippines (Remote)\nSchedule: Mon-Fri, EST",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "us only phrase",
+  "location": "",
+  "text": "Remote — US and Canada only.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "eu residents only",
+  "location": "",
+  "text": "Fully remote. EU residents only.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "us-based candidates only",
+  "location": "",
+  "text": "We can consider US-based candidates only at this time.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "can be based anywhere",
+  "location": "",
+  "text": "You can be based anywhere. We're a remote team spread across time zones.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "hire globally",
+  "location": "",
+  "text": "We hire globally and work across multiple countries and time zones.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "anywhere in the world",
+  "location": "",
+  "text": "You can work from anywhere in the world.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "tz range pass",
+  "location": "",
+  "text": "Open to anyone working UTC−3 to UTC+3.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "tz range fail",
+  "location": "",
+  "text": "Open to anyone working UTC−3 to UTC+3.",
+  "country": "IN",
+  "timezone": "UTC+05:30",
+  "expect": "restricted"
+ },
+ {
+  "note": "tz gmt range",
+  "location": "",
+  "text": "We need overlap, so you should be between GMT-5 and GMT+1.",
+  "country": "BR",
+  "timezone": "UTC-03:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "cet plus minus",
+  "location": "",
+  "text": "Must work CET +/- 3 hours.",
+  "country": "TR",
+  "timezone": "UTC+03:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "cet plus minus fail",
+  "location": "",
+  "text": "Must work CET +/- 3 hours.",
+  "country": "US",
+  "timezone": "UTC-05:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "within hours of eastern",
+  "location": "",
+  "text": "You must be within 3 hours of Eastern time.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "within hours of eastern pass",
+  "location": "",
+  "text": "You must be within 3 hours of Eastern time.",
+  "country": "US",
+  "timezone": "UTC-08:00",
+  "expect": "eligible"
+ },
+ {
+  "note": "latam time zone",
+  "location": "",
+  "text": "Remote first environment and collaboration in LATAM time zone.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ },
+ {
+  "note": "no country set, restricted job",
+  "location": "USA Only",
+  "text": "",
+  "country": "",
+  "timezone": "",
+  "expect": "restricted",
+  "note_contains": "Set your country"
+ },
+ {
+  "note": "no tz set, tz job",
+  "location": "",
+  "text": "Open to anyone working UTC−3 to UTC+3.",
+  "country": "PT",
+  "timezone": "",
+  "expect": "restricted",
+  "note_contains": "Set your timezone"
+ },
+ {
+  "note": "benefits limited to us employees",
+  "location": "",
+  "text": "Eligibility for company-sponsored health benefits is limited to team members based in the United States. This program does not extend to team members located in other countries, such as Canada or the UK.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "not_stated"
+ },
+ {
+  "note": "pay ranges by state",
+  "location": "",
+  "text": "For candidates located in California, New York, Washington, and Colorado, the starting base pay for this position ranges from $15 to $25 per hour.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "not_stated"
+ },
+ {
+  "note": "working hours est",
+  "location": "",
+  "text": "The preferred schedule is 8:00 AM–4:00 PM EST, but earlier starts, as early as 4:00 AM EST, are also permitted.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "not_stated"
+ },
+ {
+  "note": "customers worldwide",
+  "location": "",
+  "text": "Trusted by allied governments, militaries, enterprises, and research institutions worldwide.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "not_stated"
+ },
+ {
+  "note": "hq address",
+  "location": "",
+  "text": "Headquarters: 2815 2nd Ave, Seattle, WA 98121, USA",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "not_stated"
+ },
+ {
+  "note": "team in new york",
+  "location": "",
+  "text": "A lot of our people are in New York and there's some gravity here, but we already work across timezones.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "not_stated"
+ },
+ {
+  "note": "english only",
+  "location": "",
+  "text": "Resumes and communication must be submitted in English only.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "not_stated"
+ },
+ {
+  "note": "only platform",
+  "location": "",
+  "text": "Allego is the only revenue enablement platform to be named a Leader.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "not_stated"
+ },
+ {
+  "note": "publish anywhere",
+  "location": "",
+  "text": "Don't publish the work anywhere: no public pull request or public fork.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "not_stated"
+ },
+ {
+  "note": "join us",
+  "location": "",
+  "text": "Join us and help us build the future.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "not_stated"
+ },
+ {
+  "note": "worldwide + restriction in text",
+  "location": "Worldwide",
+  "text": "Applicants must be eligible to live and work in the US.",
+  "country": "PT",
+  "timezone": "UTC+00:00",
+  "expect": "restricted"
+ }
+]

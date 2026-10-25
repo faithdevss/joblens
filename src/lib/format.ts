@@ -16,3 +16,16 @@ export function formatShortDate(iso: string): string {
   if (Number.isNaN(d.getTime())) return iso;
   return d.toLocaleDateString("en", { month: "short", day: "numeric" });
 }
+
+/** Today on this computer, as `YYYY-MM-DD`. */
+export function todayIso(now = new Date()): string {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+}
+
+/** "Oct 25" from `YYYY-MM-DD`, read as a local day. */
+export function formatDay(day: string): string {
+  const [y, m, d] = day.split("-").map(Number);
+  if (!y || !m || !d) return day;
+  return new Date(y, m - 1, d).toLocaleDateString("en", { month: "short", day: "numeric" });
+}

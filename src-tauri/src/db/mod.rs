@@ -13,6 +13,12 @@ pub const DB_FILE_NAME: &str = "joblens.db";
 const MIGRATIONS: &[&str] = &[
     include_str!("migrations/0001_init.sql"),
     include_str!("migrations/0002_resume_meta.sql"),
+    include_str!("migrations/0003_job_feed.sql"),
+    include_str!("migrations/0004_job_analysis.sql"),
+    include_str!("migrations/0005_apply.sql"),
+    include_str!("migrations/0006_tracker.sql"),
+    include_str!("migrations/0007_prep.sql"),
+    include_str!("migrations/0008_searches_alerts.sql"),
 ];
 
 pub fn open(path: &Path) -> AppResult<Connection> {
@@ -92,10 +98,11 @@ mod tests {
         for t in [
             "applications",
             "drafts",
+            "job_analysis",
             "job_sources",
             "jobs",
             "profile",
-            "search_settings",
+            "searches",
             "settings",
             "sources",
         ] {

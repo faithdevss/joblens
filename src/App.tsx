@@ -15,6 +15,7 @@ export default function App() {
   const [view, setView] = useState<ViewId>("feed");
   const [info, setInfo] = useState<AppInfo | null>(null);
   const [setupOpen, setSetupOpen] = useState(false);
+  const [settingsFocus, setSettingsFocus] = useState<"sources" | null>(null);
   const toast = useToast();
   const data = useAppData();
 
@@ -39,11 +40,26 @@ export default function App() {
       <Sidebar
         view={view}
         version={info?.version ?? "0.1.0"}
-        onNavigate={setView}
+        onNavigate={(v) => {
+          setSettingsFocus(null);
+          setView(v);
+        }}
         onQuickSetup={() => setSetupOpen(true)}
       />
       <main className="main">
-        {view === "feed" && <FeedView />}
+        {view === "feed" && (
+          <FeedView
+            search={data.search}
+            searches={data.searches}
+            onSwitchSearch={data.switchSearch}
+            resumeLines={data.stored?.resumeLines ?? []}
+            changeProfile={data.changeProfile}
+            onOpenSources={() => {
+              setSettingsFocus("sources");
+              setView("settings");
+            }}
+          />
+        )}
         {view === "applications" && <ApplicationsView />}
         {view === "resume" && <ResumeView data={data} />}
         {view === "settings" && (
@@ -52,6 +68,7 @@ export default function App() {
             data={data}
             onEditProfile={() => setView("resume")}
             onRunSetup={() => setSetupOpen(true)}
+            focus={settingsFocus}
           />
         )}
       </main>

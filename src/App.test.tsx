@@ -50,8 +50,8 @@ describe("App shell", () => {
     fakeBackend(invoke);
     renderApp();
     await userEvent.click(screen.getByRole("button", { name: /Settings/ }));
-    expect(await screen.findByText("/data/joblens.db")).toBeInTheDocument();
-    expect(screen.getByText("4.0 KB")).toBeInTheDocument();
+    expect(await screen.findByText("/data")).toBeInTheDocument();
+    expect(screen.getByText("2.0 KB")).toBeInTheDocument();
   });
 
   it("shows an error toast when data can't be opened", async () => {
