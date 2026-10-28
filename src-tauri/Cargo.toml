@@ -52,6 +52,15 @@ opt-level = 3
 [profile.dev.package.regex-syntax]
 opt-level = 3
 
+[profile.dev.package.regex]
+opt-level = 3
+
+[profile.dev.package.aho-corasick]
+opt-level = 3
+
+[profile.dev.package.memchr]
+opt-level = 3
+
 [dev-dependencies]
 lopdf = "0.42"
 tempfile = "3.27.0"

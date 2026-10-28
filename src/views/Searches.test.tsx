@@ -51,7 +51,9 @@ describe("Saved searches", () => {
       ["My search", false],
       ["Staff roles", true],
     ]);
-    expect(screen.getByLabelText("Saved search")).toHaveDisplayValue("Staff roles");
+    expect(screen.getByRole("combobox", { name: "Saved search" })).toHaveDisplayValue(
+      "Staff roles",
+    );
 
     await userEvent.click(screen.getByRole("button", { name: /Job feed/ }));
     const picker = await screen.findByRole("combobox", { name: "Saved search" });

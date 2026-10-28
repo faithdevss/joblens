@@ -1,0 +1,139 @@
+{
+ "id": "744000157570619",
+ "name": "Sr Advisory Solution Consultant",
+ "uuid": "f89c2669-483b-4f11-bbc1-9ec7ea2ff52c",
+ "jobId": "2825226f-3c2c-4d3e-87b5-6ec134c69bc3",
+ "jobAdId": "4ab6f459-a95b-49cf-9722-356ab458291e",
+ "defaultJobAd": true,
+ "refNumber": "JB0074869",
+ "company": {
+  "name": "ServiceNow",
+  "identifier": "ServiceNow"
+ },
+ "location": {
+  "city": "Los Angeles ",
+  "region": "CALIFORNIA",
+  "country": "us",
+  "address": "Remote ",
+  "remote": true,
+  "hybrid": false,
+  "fullLocation": "Los Angeles , CALIFORNIA, United States"
+ },
+ "customField": [
+  {
+   "fieldId": "60345fa28b4ba8595bef1863",
+   "fieldLabel": "Recruiting Team",
+   "valueId": "professional",
+   "valueLabel": "Professional"
+  },
+  {
+   "fieldId": "60345e1a0b24a127cbdfa148",
+   "fieldLabel": "Employee Type",
+   "valueId": "0082f6cbe6154da19322cbab1f6aa5af",
+   "valueLabel": "Regular"
+  },
+  {
+   "fieldId": "5f63a78f1dae5c5c4e54ba2b",
+   "fieldLabel": "Department",
+   "valueId": "2294208",
+   "valueLabel": "Sales"
+  },
+  {
+   "fieldId": "COUNTRY",
+   "fieldLabel": "Country/Region",
+   "valueId": "us",
+   "valueLabel": "United States"
+  },
+  {
+   "fieldId": "5f63a78f1dae5c5c4e54ba2a",
+   "fieldLabel": "Brands",
+   "valueId": "default",
+   "valueLabel": "ServiceNow"
+  },
+  {
+   "fieldId": "60345d5c5165a31b17288279",
+   "fieldLabel": "Region",
+   "valueId": "722a833b93e4437798309f43c0d25990",
+   "valueLabel": "AMS - North America and Canada"
+  },
+  {
+   "fieldId": "603462175165a31b1728827d",
+   "fieldLabel": "Cost Center",
+   "valueId": "CC3047",
+   "valueLabel": "3047 Armis SC"
+  },
+  {
+   "fieldId": "6034601b43915a29a4b3389b",
+   "fieldLabel": "Job Location",
+   "valueId": "L_RMTE_CA",
+   "valueLabel": "Remote, CA, USA(L_RMTE_CA)"
+  },
+  {
+   "fieldId": "618ed92b8f5e5f110e5bfb95",
+   "fieldLabel": "Work Persona",
+   "valueId": "5530c877-6b63-4bf5-bde8-215ef35bf172",
+   "valueLabel": "Flexible or Remote"
+  },
+  {
+   "fieldId": "690cc0e8c682c3dbadaa7d73",
+   "fieldLabel": "Job Posting Type",
+   "valueId": "professional",
+   "valueLabel": "Professional"
+  }
+ ],
+ "releasedDate": "2026-10-23T21:07:31.004Z",
+ "creator": {
+  "name": "",
+  "avatarUrl": ""
+ },
+ "postingUrl": "https://jobs.smartrecruiters.com/ServiceNow/744000157570619-sr-advisory-solution-consultant",
+ "applyUrl": "https://jobs.smartrecruiters.com/ServiceNow/744000157570619-sr-advisory-solution-consultant?oga=true",
+ "referralUrl": "https://jobs.smartrecruiters.com/external-referrals/company/ServiceNow/publication/f89c2669-483b-4f11-bbc1-9ec7ea2ff52c?dcr_ci=ServiceNow",
+ "jobAd": {
+  "sections": {
+   "companyDescription": {
+    "title": "Company Description",
+    "text": "<p>It all started when engineer Fred Luddy wrote code that automated a tedious task for his coworker, Phyllis. She cried tears of joy. That moment inspired Fred to build a company that could do that for everyone—freeing people from busywork so they could focus on meaningful work. Today, ServiceNow is the AI control tower for business reinvention. Our ServiceNow AI platform brings together any AI, any data, and any workflow— helping 85% of the Fortune 500® work smarter, faster, and better. We're building an AI-native culture where technology and talent are unstoppable together. And we're just getting started.</p><p>Join us to put AI to work for people.</p><p>"
+   },
+   "jobDescription": {
+    "title": "Job Description",
+    "text": "<p>We are seeking a Solution Consultant to partner with Sales and help enterprise customers address complex security, identity, access, asset visibility, exposure management, and risk challenges.&#xa0;</p><p>In this role, you will serve as a trusted technical and business advisor, leading discovery, solution design, product demonstrations, proof-of-value engagements, and customer validation activities. You will work directly with security, identity, infrastructure, IT, risk, and executive stakeholders to connect technical capabilities to measurable business outcomes.&#xa0;</p><p>The ideal candidate has strong cybersecurity knowledge, practical enterprise networking experience,&#xa0;strong communication&#xa0;skills, and a proven ability to support complex enterprise sales cycles.&#xa0;</p>"
+   },
+   "qualifications": {
+    "title": "Qualifications",
+    "text": "<p><strong>Required Qualifications&#xa0;</strong></p><ul><li>5+ years of experience in Solution Consulting, Sales Engineering, Pre-Sales Engineering, Solutions Architecture, or a related technical role.&#xa0;</li><li>5+ years of customer-facing technical, pre-sales, or customer support experience.&#xa0;</li><li>Experience supporting complex cybersecurity, SaaS, or enterprise platform sales cycles with enterprise customers.&#xa0;</li><li>Strong understanding of cybersecurity concepts, identity&#xa0;and&#xa0;access, governance&#xa0;and&#xa0;risk, and security operations.&#xa0;</li><li>Required&#xa0;strong&#xa0;working knowledge of enterprise networking concepts, including routing, switching, VLANs, subnetting, firewalls, DNS, NAT, and network segmentation.&#xa0;</li><li>"
+   },
+   "additionalInformation": {
+    "title": "Additional Information",
+    "text": "<p><strong>Work Personas</strong></p><p>We approach our distributed world of work with flexibility and trust. Work personas (flexible, remote, or required in office) are categories that are assigned to ServiceNow employees depending on the nature of their work and their assigned work location. <a href=\"https://careers.servicenow.com/life-at-servicenow#workpersonas\" rel=\"noopener noreferrer\"><u>Learn more here</u></a>. To determine eligibility for a work persona, ServiceNow may confirm the distance between your primary residence and the closest ServiceNow office using a third-party service.</p><p><strong>Equal Opportunity Employer</strong></p><p>"
+   }
+  }
+ },
+ "active": true,
+ "visibility": "PUBLIC",
+ "industry": {
+  "id": "it_and_services",
+  "label": "Information Technology And Services"
+ },
+ "function": {
+  "id": "consulting",
+  "label": "Consulting"
+ },
+ "department": {
+  "id": 2294208,
+  "label": "Sales"
+ },
+ "experienceLevel": {
+  "id": "not_applicable",
+  "label": "Not Applicable"
+ },
+ "typeOfEmployment": {
+  "id": "permanent",
+  "label": "Full-time"
+ },
+ "language": {
+  "code": "en",
+  "label": "English",
+  "labelNative": "English (US)"
+ }
+}

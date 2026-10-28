@@ -143,3 +143,48 @@ export function refreshSummary(report: RefreshReport): string {
   }
   return parts.join(" · ") || "No sources are turned on.";
 }
+
+export type DescriptionBlock =
+  | { kind: "heading"; text: string }
+  | { kind: "paragraph"; text: string }
+  | { kind: "list"; items: string[] };
+
+const BULLET = /^[•·▪●◦‣*\-–]\s*/;
+
+/**
+ * Splits plain-text job descriptions into headings, paragraphs and lists. Postings
+ * arrive as flattened HTML, so short unpunctuated lines are treated as headings.
+ */
+export function descriptionBlocks(text: string): DescriptionBlock[] {
+  const lines = text
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean);
+  const blocks: DescriptionBlock[] = [];
+  for (let i = 0; i < lines.length; i++) {
+    let line = lines[i];
+    // A bullet left alone on its line belongs to the text after it.
+    if (BULLET.test(line) && line.replace(BULLET, "") === "" && i + 1 < lines.length) {
+      line = `• ${lines[++i]}`;
+    }
+    if (BULLET.test(line) && line.replace(BULLET, "") !== "") {
+      const item = line.replace(BULLET, "");
+      const last = blocks[blocks.length - 1];
+      if (last?.kind === "list") last.items.push(item);
+      else blocks.push({ kind: "list", items: [item] });
+    } else if (isHeading(line) && i + 1 < lines.length) {
+      blocks.push({ kind: "heading", text: line.replace(/:$/, "") });
+    } else {
+      blocks.push({ kind: "paragraph", text: line });
+    }
+  }
+  return blocks;
+}
+
+function isHeading(line: string): boolean {
+  return (
+    line.length <= 60 &&
+    line.split(/\s+/).length <= 8 &&
+    (/:$/.test(line) || !/[.!?,;]$/.test(line))
+  );
+}

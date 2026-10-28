@@ -5,7 +5,7 @@ import type { JobState } from "../bindings/JobState";
 import type { JobSummary } from "../bindings/JobSummary";
 import type { OpenCheck } from "../bindings/OpenCheck";
 import type { Weights } from "../bindings/Weights";
-import { formatAge, jobDate, salaryText } from "../lib/feed";
+import { descriptionBlocks, formatAge, jobDate, salaryText } from "../lib/feed";
 import { ipc } from "../lib/ipc";
 import type { ChangeProfile } from "../lib/useAppData";
 import { AiCheck } from "./AiCheck";
@@ -361,7 +361,7 @@ export function JobDetailPane({
 
               <section className="job-section">
                 <h3>Description</h3>
-                <div className="job-description">{detail.description || "No description."}</div>
+                <JobDescription text={detail.description} />
               </section>
 
               {job.listings.length > 0 && (
@@ -390,5 +390,28 @@ export function JobDetailPane({
           ))}
       </div>
     </article>
+  );
+}
+
+function JobDescription({ text }: { text: string }) {
+  const blocks = descriptionBlocks(text);
+  if (blocks.length === 0) return <p className="job-description muted">No description.</p>;
+  return (
+    <div className="job-description">
+      {blocks.map((b, i) => {
+        // Block order is the identity; the text never reorders.
+        const key = i;
+        if (b.kind === "heading") return <h4 key={key}>{b.text}</h4>;
+        if (b.kind === "paragraph") return <p key={key}>{b.text}</p>;
+        return (
+          <ul key={key}>
+            {b.items.map((item, j) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: item order is the identity
+              <li key={j}>{item}</li>
+            ))}
+          </ul>
+        );
+      })}
+    </div>
   );
 }

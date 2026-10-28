@@ -163,7 +163,11 @@ fn listings(conn: &Connection, job_id: Option<i64>) -> AppResult<HashMap<i64, Ve
     })?;
     for row in rows {
         let (id, listing) = row?;
-        out.entry(id).or_default().push(listing);
+        let job = out.entry(id).or_default();
+        // A source listing the job once per location is still one place to see it.
+        if !job.iter().any(|l| l.source_id == listing.source_id) {
+            job.push(listing);
+        }
     }
     Ok(out)
 }

@@ -145,8 +145,9 @@ pub fn set_setup_status(state: State<'_, AppState>, status: SetupStatus) -> AppR
     store::set_setup_status(&lock(&state), status)
 }
 
+/// Async so scoring every job runs off the main thread and doesn't freeze the window.
 #[tauri::command]
-pub fn get_feed(state: State<'_, AppState>) -> AppResult<Feed> {
+pub async fn get_feed(state: State<'_, AppState>) -> AppResult<Feed> {
     feed::feed(&lock(&state))
 }
 
@@ -184,7 +185,8 @@ pub async fn refresh_sources(
     Ok(report)
 }
 
-/// Finds a company's Greenhouse / Lever / Ashby board from a name or link and adds it.
+/// Finds a company's job board (Greenhouse, Lever, Ashby, Workable, Recruitee or
+/// SmartRecruiters) from a name or link and adds it.
 #[tauri::command]
 pub async fn add_watchlist_company(
     state: State<'_, AppState>,

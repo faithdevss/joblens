@@ -47,19 +47,19 @@ export default function App() {
         onQuickSetup={() => setSetupOpen(true)}
       />
       <main className="main">
-        {view === "feed" && (
-          <FeedView
-            search={data.search}
-            searches={data.searches}
-            onSwitchSearch={data.switchSearch}
-            resumeLines={data.stored?.resumeLines ?? []}
-            changeProfile={data.changeProfile}
-            onOpenSources={() => {
-              setSettingsFocus("sources");
-              setView("settings");
-            }}
-          />
-        )}
+        {/* Kept mounted so coming back to the feed is instant; it reloads quietly when shown. */}
+        <FeedView
+          active={view === "feed"}
+          search={data.search}
+          searches={data.searches}
+          onSwitchSearch={data.switchSearch}
+          resumeLines={data.stored?.resumeLines ?? []}
+          changeProfile={data.changeProfile}
+          onOpenSources={() => {
+            setSettingsFocus("sources");
+            setView("settings");
+          }}
+        />
         {view === "applications" && <ApplicationsView />}
         {view === "resume" && <ResumeView data={data} />}
         {view === "settings" && (

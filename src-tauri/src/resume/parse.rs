@@ -190,13 +190,17 @@ pub fn to_lines(text: &str) -> Vec<String> {
     static BULLET_GAP: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r"^([•·▪●◦‣○■►➢✓→*\-–])(?:\t|\s{2,})+").unwrap());
     static SPACES: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\s+").unwrap());
+    static WORD: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\b[A-Za-z]+\b").unwrap());
     text.lines()
         .map(|l| {
             let l = l
                 .replace('\u{a0}', " ")
                 .replace('\u{fb01}', "fi")
                 .replace('\u{fb02}', "fl")
-                .replace('\u{2019}', "'");
+                .replace('\u{2019}', "'")
+                // Hyphen, non-breaking hyphen, figure dash and minus all read as "-".
+                .replace(['\u{2010}', '\u{2011}', '\u{2012}', '\u{2212}'], "-");
+            let l = WORD.replace_all(&l, |c: &regex::Captures| small_caps_fix(&c[0]));
             // A tab after a bullet is just indentation.
             let l = BULLET_GAP.replace(l.trim(), "$1 ");
             // Wide gaps usually separate columns, e.g. "Engineer        Mar 2021 – Now".
@@ -208,6 +212,18 @@ pub fn to_lines(text: &str) -> Vec<String> {
         })
         .filter(|l| !l.is_empty())
         .collect()
+}
+
+/// Some fonts map small-caps "I" to "i", so "SENIOR" is extracted as "SENiOR". Short
+/// mixed words like "iOS" are left alone.
+fn small_caps_fix(word: &str) -> String {
+    let upper = word.chars().filter(char::is_ascii_uppercase).count();
+    let only_i = word.chars().all(|c| c.is_ascii_uppercase() || c == 'i');
+    if upper >= 3 && only_i && word.contains('i') {
+        word.to_ascii_uppercase()
+    } else {
+        word.to_string()
+    }
 }
 
 struct Ids {
@@ -498,7 +514,25 @@ fn parse_roles(lines: &[String], body: &[usize], ids: &mut Ids) -> Vec<Role> {
 
         let sentence = word_count(&text) > 10 || text.ends_with('.');
         if is_bullet(line) || (sentence && !roles.is_empty()) {
-            if roles.is_empty() || (!pending.is_empty() && pending.len() <= 2) {
+            let unfinished = roles
+                .last()
+                .filter(|r| r.company.is_empty() && r.achievements.is_empty());
+            if let Some(role) = unfinished
+                && !pending.is_empty()
+                && pending.len() <= 2
+            {
+                // "Title  Dates" then "Company" on its own line: finish that role.
+                let mut parts: Vec<String> = (!role.title.is_empty())
+                    .then(|| role.title.clone())
+                    .into_iter()
+                    .collect();
+                parts.extend(pending.iter().map(|&p| lines[p].clone()));
+                let (title, company) = title_company(&parts);
+                let role = roles.last_mut().unwrap();
+                (role.title, role.company) = (title, company);
+                role.lines.extend(to_u32(&pending));
+                pending.clear();
+            } else if roles.is_empty() || (!pending.is_empty() && pending.len() <= 2) {
                 // Header lines with no dates: still a role, the date check will flag it.
                 roles.push(new_role(ids, &pending, None, String::new()));
                 pending.clear();
@@ -995,6 +1029,34 @@ Owned the design system.
         assert_eq!(p.contact.phone, "");
         assert!(p.roles.is_empty());
         assert!(p.skills.is_empty());
+    }
+
+    #[test]
+    fn reads_dates_with_typographic_dashes_and_small_caps() {
+        // PDFs often use U+2011 / U+2212 dashes, and some fonts turn small-caps "I" into "i".
+        let text = "\
+Sam Rivera
+sam@example.com
+
+Experience
+SENiOR SOFTWARE ENGiNEER October 2021 \u{2011} Present
+Acme Corp
+Led the move to a typed API layer used by every team.
+
+Software Engineer, Globex, 2018 \u{2212} 2021
+Built the billing service on iOS and web.
+";
+        let (_, p) = run(text);
+        assert_eq!(p.roles.len(), 2, "{:#?}", p.roles);
+        assert_eq!(p.roles[0].title, "SENIOR SOFTWARE ENGINEER");
+        assert_eq!(p.roles[0].company, "Acme Corp");
+        assert_eq!(p.roles[0].dates, "October 2021 - Present");
+        assert_eq!(p.roles[1].title, "Software Engineer");
+        assert_eq!(p.roles[1].dates, "2018 - 2021");
+        assert_eq!(
+            p.roles[1].achievements[0].text,
+            "Built the billing service on iOS and web."
+        );
     }
 
     #[test]

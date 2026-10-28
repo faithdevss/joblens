@@ -9,7 +9,7 @@ vi.mock("@tauri-apps/plugin-opener", () => ({ openUrl: (url: string) => openUrl(
 
 import App from "../App";
 import { ToastProvider } from "../components/Toast";
-import { fakeBackend, sampleJobs } from "../test/fixtures";
+import { fakeBackend, job, sampleJobs } from "../test/fixtures";
 
 function renderApp() {
   return render(
@@ -40,6 +40,20 @@ describe("Job feed", () => {
     expect(within(detail).getByText("Open worldwide (“Worldwide”).")).toBeInTheDocument();
     expect(await within(detail).findByText(/only ~90 words/)).toBeInTheDocument();
     expect(within(detail).getByText("GraphQL")).toBeInTheDocument();
+  });
+
+  it("shows long lists 50 at a time", async () => {
+    const jobs = Array.from({ length: 120 }, (_, i) =>
+      job({ id: i + 1, title: `Role ${i + 1}`, score: 90 - (i % 50) }),
+    );
+    fakeBackend(invoke, { jobs });
+    renderApp();
+    const list = await screen.findByRole("list", { name: "Jobs" });
+    expect(within(list).getAllByRole("listitem")).toHaveLength(51);
+    await userEvent.click(within(list).getByRole("button", { name: /Show 50 more · 70 left/ }));
+    await userEvent.click(within(list).getByRole("button", { name: /Show 20 more · 20 left/ }));
+    expect(within(list).getAllByRole("listitem")).toHaveLength(120);
+    expect(within(list).queryByRole("button", { name: /more/ })).not.toBeInTheDocument();
   });
 
   it("shows where else a job is listed and opens the original", async () => {
@@ -163,7 +177,7 @@ describe("Job sources", () => {
     expect(await screen.findByRole("status")).toHaveTextContent("Couldn’t find a Greenhouse");
   });
 
-  it("adds a job by hand", async () => {
+  it("saves a job found elsewhere", async () => {
     const db = fakeBackend(invoke);
     await openSettings();
     await userEvent.type(screen.getByRole("textbox", { name: "Job title" }), "Designer");
@@ -172,8 +186,8 @@ describe("Job sources", () => {
       screen.getByRole("textbox", { name: "Job description" }),
       "Design things.",
     );
-    await userEvent.click(screen.getByRole("button", { name: "Add job" }));
-    expect(await screen.findByRole("status")).toHaveTextContent("Added to your feed and saved.");
+    await userEvent.click(screen.getByRole("button", { name: "Save to my feed" }));
+    expect(await screen.findByRole("status")).toHaveTextContent("Saved to your feed.");
     expect(db.manualJobs).toEqual([
       { url: "", title: "Designer", company: "Acme", location: "", description: "Design things." },
     ]);

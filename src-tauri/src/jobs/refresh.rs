@@ -56,6 +56,7 @@ fn detail(row: &SourceRow) -> Option<String> {
         Adapter::Remotive => Some("remotive.com".into()),
         Adapter::RemoteOk => Some("remoteok.com".into()),
         Adapter::Wwr => Some("weworkremotely.com".into()),
+        Adapter::Jobicy => Some("jobicy.com".into()),
         Adapter::Ats { ats, token } => Some(format!("{} · {token}", ats.label())),
     }
 }
@@ -163,8 +164,11 @@ pub fn upsert_job(conn: &Connection, source_id: &str, raw: &RawJob) -> AppResult
             params![source_id, raw.external_id, now, url],
         )?;
         // The source a job was first found on owns its details; edits there flow through.
+        // A posting fetched without its description (a SmartRecruiters posting that
+        // failed to load) keeps the one already stored.
         conn.execute(
-            "UPDATE jobs SET title = ?2, company = ?3, description = ?4, url = ?5,
+            "UPDATE jobs SET title = ?2, company = ?3,
+                description = CASE WHEN ?4 = '' THEN description ELSE ?4 END, url = ?5,
                 location_text = ?6, salary_min = ?7, salary_max = ?8, salary_currency = ?9,
                 salary_period = ?10, salary_text = ?11, posted_at = COALESCE(?12, posted_at), tags = ?13
              WHERE id = ?1
@@ -228,6 +232,31 @@ pub fn upsert_job(conn: &Connection, source_id: &str, raw: &RawJob) -> AppResult
     Ok((job_id, added))
 }
 
+/// Records another listing of a stored job on the same source. A listing that was
+/// its own job before moves over, and that duplicate is pruned.
+fn add_listing(
+    conn: &Connection,
+    source_id: &str,
+    external_id: &str,
+    job_id: i64,
+    url: &str,
+) -> AppResult<()> {
+    conn.execute(
+        "INSERT INTO job_sources (job_id, source_id, external_id, url, seen_at)
+         VALUES (?1, ?2, ?3, ?4, ?5)
+         ON CONFLICT (source_id, external_id)
+         DO UPDATE SET job_id = excluded.job_id, url = excluded.url, seen_at = excluded.seen_at",
+        params![
+            job_id,
+            source_id,
+            external_id,
+            Some(url).filter(|u| !u.is_empty()),
+            dates::now()
+        ],
+    )?;
+    Ok(())
+}
+
 /// Saves a fetch result and the source's status. `full_board` means the result is the
 /// source's complete list, so listings missing from it have closed.
 fn store_run(
@@ -251,16 +280,24 @@ fn store_run(
     let tx = conn.unchecked_transaction()?;
     let mut added = 0;
     let mut seen = HashSet::new();
+    let mut unique = Vec::new();
     for mut raw in jobs {
         if !seen.insert(raw.external_id.clone()) {
             continue;
         }
-        // Lever and Ashby postings don't name the company; the watchlist entry does.
+        // Some boards' postings don't name the company; the watchlist entry does.
         if raw.company.is_empty() {
             raw.company = source_name.to_string();
         }
-        if upsert_job(&tx, source_id, &raw)?.1 {
+        unique.push(raw);
+    }
+    for repost in dedupe::merge_reposts(unique) {
+        let (job_id, new) = upsert_job(&tx, source_id, &repost.job)?;
+        if new {
             added += 1;
+        }
+        for (external_id, url) in &repost.also {
+            add_listing(&tx, source_id, external_id, job_id, url)?;
         }
     }
     if full_board {
@@ -407,7 +444,7 @@ mod tests {
             .into_iter()
             .map(|s| s.id)
             .collect();
-        assert_eq!(ids, ["remotive", "remoteok", "wwr"]);
+        assert_eq!(ids, ["remotive", "remoteok", "wwr", "jobicy"]);
     }
 
     #[test]
@@ -452,6 +489,79 @@ mod tests {
     }
 
     #[test]
+    fn one_source_posting_a_job_per_place_is_one_job() {
+        let (_d, conn) = fresh();
+        let desc = "Audit business and IT operations across finance and sales teams. ".repeat(8);
+        let at = |id: &str, place: &str| RawJob {
+            location: place.into(),
+            ..raw(id, "ServiceNow", "Senior Auditor", &desc)
+        };
+        let out = store_run(
+            &conn,
+            "wwr",
+            "WWR",
+            true,
+            Ok(vec![at("tx", "Texas"), at("fl", "Florida")]),
+        )
+        .unwrap();
+        assert_eq!(
+            out,
+            RunOutcome::Ok {
+                fetched: 2,
+                added: 1
+            }
+        );
+        assert_eq!(count(&conn, "SELECT COUNT(*) FROM jobs"), 1);
+        assert_eq!(count(&conn, "SELECT COUNT(*) FROM job_sources"), 2);
+        let location: String = conn
+            .query_row("SELECT location_text FROM jobs", [], |r| r.get(0))
+            .unwrap();
+        assert_eq!(location, "Texas; Florida");
+        let job_id: i64 = conn
+            .query_row("SELECT id FROM jobs", [], |r| r.get(0))
+            .unwrap();
+
+        // The first listing closes; the job lives on through the other.
+        store_run(&conn, "wwr", "WWR", true, Ok(vec![at("fl", "Florida")])).unwrap();
+        assert_eq!(
+            count(
+                &conn,
+                &format!("SELECT COUNT(*) FROM jobs WHERE id = {job_id}")
+            ),
+            1
+        );
+        assert_eq!(count(&conn, "SELECT COUNT(*) FROM jobs"), 1);
+        assert_eq!(count(&conn, "SELECT COUNT(*) FROM job_sources"), 1);
+    }
+
+    #[test]
+    fn earlier_duplicates_from_one_source_are_folded_in() {
+        let (_d, conn) = fresh();
+        let desc = "Audit business and IT operations across finance and sales teams. ".repeat(8);
+        let at = |id: &str, place: &str| RawJob {
+            location: place.into(),
+            ..raw(id, "ServiceNow", "Senior Auditor", &desc)
+        };
+        // Stored one at a time, as before reposts were merged.
+        let tx = conn.unchecked_transaction().unwrap();
+        upsert_job(&tx, "wwr", &at("tx", "Texas")).unwrap();
+        upsert_job(&tx, "wwr", &at("fl", "Florida")).unwrap();
+        tx.commit().unwrap();
+        assert_eq!(count(&conn, "SELECT COUNT(*) FROM jobs"), 2);
+
+        store_run(
+            &conn,
+            "wwr",
+            "WWR",
+            true,
+            Ok(vec![at("tx", "Texas"), at("fl", "Florida")]),
+        )
+        .unwrap();
+        assert_eq!(count(&conn, "SELECT COUNT(*) FROM jobs"), 1);
+        assert_eq!(count(&conn, "SELECT COUNT(*) FROM job_sources"), 2);
+    }
+
+    #[test]
     fn different_postings_with_one_title_stay_apart() {
         let (_d, conn) = fresh();
         let a =
@@ -488,6 +598,163 @@ mod tests {
         )
         .unwrap();
         assert_eq!(count(&conn, "SELECT COUNT(*) FROM jobs"), 4);
+    }
+
+    fn auditor(id: &str, place: &str) -> RawJob {
+        let desc = "Audit business and IT operations across finance and sales teams. ".repeat(8);
+        RawJob {
+            location: place.into(),
+            ..raw(id, "ServiceNow", "Senior Auditor", &desc)
+        }
+    }
+
+    fn one_str(conn: &Connection, sql: &str) -> String {
+        conn.query_row(sql, [], |r| r.get(0)).unwrap()
+    }
+
+    #[test]
+    fn reposts_and_other_sites_are_one_job_listed_once_per_site() {
+        let (_d, conn) = fresh();
+        store_run(
+            &conn,
+            "wwr",
+            "WWR",
+            true,
+            Ok(vec![auditor("tx", "Texas"), auditor("fl", "Florida")]),
+        )
+        .unwrap();
+        store_run(
+            &conn,
+            "remotive",
+            "Remotive",
+            false,
+            Ok(vec![auditor("r1", "USA")]),
+        )
+        .unwrap();
+        assert_eq!(count(&conn, "SELECT COUNT(*) FROM jobs"), 1);
+        assert_eq!(count(&conn, "SELECT COUNT(*) FROM job_sources"), 3);
+        // Each listing keeps its own link.
+        assert_eq!(
+            one_str(
+                &conn,
+                "SELECT url FROM job_sources WHERE external_id = 'fl'"
+            ),
+            "https://example.com/fl"
+        );
+        let feed = crate::jobs::feed::feed(&conn).unwrap();
+        assert_eq!(feed.jobs.len(), 1);
+        let sites: Vec<&str> = feed.jobs[0]
+            .listings
+            .iter()
+            .map(|l| l.source_id.as_str())
+            .collect();
+        assert_eq!(sites, ["wwr", "remotive"]);
+    }
+
+    #[test]
+    fn reposts_in_a_new_order_stay_the_same_job() {
+        let (_d, conn) = fresh();
+        let run = |jobs: Vec<RawJob>| store_run(&conn, "wwr", "WWR", true, Ok(jobs)).unwrap();
+        run(vec![auditor("tx", "Texas"), auditor("fl", "Florida")]);
+        let id = count(&conn, "SELECT id FROM jobs");
+        let out = run(vec![auditor("fl", "Florida"), auditor("tx", "Texas")]);
+        assert_eq!(
+            out,
+            RunOutcome::Ok {
+                fetched: 2,
+                added: 0
+            }
+        );
+        assert_eq!(count(&conn, "SELECT id FROM jobs"), id);
+        assert_eq!(count(&conn, "SELECT COUNT(*) FROM jobs"), 1);
+        // A third place shows up on the next fetch.
+        run(vec![
+            auditor("tx", "Texas"),
+            auditor("fl", "Florida"),
+            auditor("oh", "Ohio"),
+        ]);
+        assert_eq!(count(&conn, "SELECT COUNT(*) FROM jobs"), 1);
+        assert_eq!(
+            one_str(&conn, "SELECT location_text FROM jobs"),
+            "Texas; Florida; Ohio"
+        );
+        // All listings close: the job goes too.
+        run(Vec::new());
+        assert_eq!(count(&conn, "SELECT COUNT(*) FROM jobs"), 0);
+    }
+
+    #[test]
+    fn folding_old_duplicates_keeps_a_saved_one() {
+        let (_d, conn) = fresh();
+        let tx = conn.unchecked_transaction().unwrap();
+        upsert_job(&tx, "wwr", &auditor("tx", "Texas")).unwrap();
+        let (saved, _) = upsert_job(&tx, "wwr", &auditor("fl", "Florida")).unwrap();
+        tx.commit().unwrap();
+        conn.execute("UPDATE jobs SET state = 'saved' WHERE id = ?1", [saved])
+            .unwrap();
+        store_run(
+            &conn,
+            "wwr",
+            "WWR",
+            true,
+            Ok(vec![auditor("tx", "Texas"), auditor("fl", "Florida")]),
+        )
+        .unwrap();
+        assert_eq!(
+            count(
+                &conn,
+                &format!("SELECT COUNT(*) FROM jobs WHERE id = {saved} AND state = 'saved'")
+            ),
+            1,
+            "the user's saved job is never deleted"
+        );
+    }
+
+    #[test]
+    fn refetch_without_description_keeps_the_stored_one() {
+        let (_d, conn) = fresh();
+        let run = |desc: &str| {
+            store_run(
+                &conn,
+                "remotive",
+                "Remotive",
+                false,
+                Ok(vec![raw("1", "Acme", "Engineer", desc)]),
+            )
+            .unwrap()
+        };
+        run("Full description of the role.");
+        run("");
+        assert_eq!(
+            one_str(&conn, "SELECT description FROM jobs"),
+            "Full description of the role."
+        );
+        run("Updated description.");
+        assert_eq!(
+            one_str(&conn, "SELECT description FROM jobs"),
+            "Updated description."
+        );
+    }
+
+    #[test]
+    fn same_id_twice_in_one_fetch_is_stored_once() {
+        let (_d, conn) = fresh();
+        let out = store_run(
+            &conn,
+            "wwr",
+            "WWR",
+            true,
+            Ok(vec![auditor("tx", "Texas"), auditor("tx", "Ohio")]),
+        )
+        .unwrap();
+        assert_eq!(
+            out,
+            RunOutcome::Ok {
+                fetched: 1,
+                added: 1
+            }
+        );
+        assert_eq!(one_str(&conn, "SELECT location_text FROM jobs"), "Texas");
     }
 
     #[test]

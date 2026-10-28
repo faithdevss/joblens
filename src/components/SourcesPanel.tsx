@@ -85,7 +85,7 @@ export function SourcesPanel() {
     setAdding(true);
     try {
       await ipc.addManualJob(manual);
-      toast("Added to your feed and saved.");
+      toast("Saved to your feed.");
       setManual(EMPTY_MANUAL);
     } catch (err) {
       toast(String(err), "error");
@@ -169,8 +169,8 @@ export function SourcesPanel() {
         <form className="source-form" onSubmit={addCompany}>
           <h3>Company watchlist</h3>
           <p className="field-hint">
-            Add a company that hires on Greenhouse, Lever or Ashby. We check its board for remote
-            openings.
+            Add a company that hires on Greenhouse, Lever, Ashby, Workable, Recruitee or
+            SmartRecruiters. We check its board for remote openings.
           </p>
           <div className="inline-form">
             <input
@@ -195,10 +195,11 @@ export function SourcesPanel() {
         </form>
 
         <form className="source-form" onSubmit={addManual}>
-          <h3>Add a job by hand</h3>
+          <h3>Save a job you found elsewhere</h3>
           <p className="field-hint">
-            Greenhouse, Lever and Ashby links are read for you. For anything else, paste the
-            description.
+            Seen a job on LinkedIn or a company site? Save it here so JobLens can match and track
+            it. Only you see it. Greenhouse, Lever, Ashby, Workable, Recruitee and SmartRecruiters
+            links are read for you; for anything else, paste the description.
           </p>
           <input aria-label="Job link" placeholder="Job link (optional)" {...field("url")} />
           <div className="form-row">
@@ -222,10 +223,10 @@ export function SourcesPanel() {
             disabled={adding || (!manual.url.trim() && !manual.description.trim())}
           >
             <Icon
-              name={adding ? "progress_activity" : "add"}
+              name={adding ? "progress_activity" : "bookmark_add"}
               className={adding ? "spin" : undefined}
             />
-            {adding ? "Adding…" : "Add job"}
+            {adding ? "Saving…" : "Save to my feed"}
           </button>
         </form>
       </div>

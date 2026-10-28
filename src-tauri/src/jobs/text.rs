@@ -1,6 +1,9 @@
 //! Turning source HTML into readable plain text, and splitting text into terms.
 
-use std::{collections::HashSet, sync::LazyLock};
+use std::{
+    collections::{HashMap, HashSet},
+    sync::LazyLock,
+};
 
 use regex::Regex;
 
@@ -14,6 +17,7 @@ static ENTITY: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"&(#[0-9]{1,7}|#[xX][0-9a-fA-F]{1,6}|[a-zA-Z]{2,8});").unwrap());
 static SPACES: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"[ \t\u{a0}]+").unwrap());
 static BLANK_LINES: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\n{3,}").unwrap());
+static LONE_BULLET: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"(?m)^•\n+").unwrap());
 
 /// Plain text from an HTML fragment: paragraphs and list items become lines.
 pub fn html_to_text(html: &str) -> String {
@@ -28,7 +32,10 @@ pub fn html_to_text(html: &str) -> String {
         }
     });
     let text = ANY_TAG.replace_all(&html, "");
-    tidy(&decode_entities(&text))
+    // `<li><p>Text</p></li>` leaves the bullet alone on its line; pull the text up to it.
+    LONE_BULLET
+        .replace_all(&tidy(&decode_entities(&text)), "• ")
+        .into_owned()
 }
 
 /// Collapses runs of spaces and blank lines, trims each line.
@@ -158,7 +165,10 @@ pub fn words(text: &str) -> Vec<String> {
 
 /// Every 1–3 word phrase in a text, for fast term lookups.
 pub struct Phrases {
-    lower: HashSet<String>,
+    words: Vec<String>,
+    /// Where each lowercased word appears. Longer phrases are checked from their first word,
+    /// which is far cheaper than storing every 2- and 3-word window.
+    at: HashMap<String, Vec<u32>>,
     /// Single words as written, for short terms like "Go" that are also English words.
     exact: HashSet<String>,
 }
@@ -167,11 +177,14 @@ pub const MAX_PHRASE_WORDS: usize = 3;
 
 impl Phrases {
     pub fn new(text: &str) -> Self {
-        let w = words(text);
-        let mut lower = HashSet::with_capacity(w.len() * MAX_PHRASE_WORDS);
-        for n in 1..=MAX_PHRASE_WORDS {
-            for win in w.windows(n) {
-                lower.insert(win.join(" "));
+        let words = words(text);
+        let mut at: HashMap<String, Vec<u32>> = HashMap::with_capacity(words.len());
+        for (i, w) in words.iter().enumerate() {
+            match at.get_mut(w) {
+                Some(spots) => spots.push(i as u32),
+                None => {
+                    at.insert(w.clone(), vec![i as u32]);
+                }
             }
         }
         let exact = text
@@ -179,12 +192,23 @@ impl Phrases {
             .filter(|s| !s.is_empty())
             .map(str::to_string)
             .collect();
-        Self { lower, exact }
+        Self { words, at, exact }
     }
 
     /// `phrase` must already be normalized with [`normalize_phrase`].
     pub fn contains(&self, phrase: &str) -> bool {
-        self.lower.contains(phrase)
+        let mut parts = phrase.split(' ');
+        let Some(spots) = parts.next().and_then(|first| self.at.get(first)) else {
+            return false;
+        };
+        let rest: Vec<&str> = parts.collect();
+        if rest.len() >= MAX_PHRASE_WORDS {
+            return false;
+        }
+        spots.iter().any(|&i| {
+            let after = &self.words[i as usize + 1..];
+            after.len() >= rest.len() && rest.iter().zip(after).all(|(r, w)| r == w)
+        })
     }
 
     pub fn contains_exact(&self, word: &str) -> bool {
@@ -207,6 +231,18 @@ mod tests {
             "<p>Hello&nbsp;<b>world</b></p><ul><li>React &amp; TS</li><li>Go</li></ul><script>x()</script>",
         );
         assert_eq!(t, "Hello world\n\n• React & TS\n• Go");
+    }
+
+    #[test]
+    fn keeps_bullets_on_the_same_line_as_paragraph_items() {
+        // Ashby wraps each list item in a paragraph.
+        let t = html_to_text(
+            "<p>About the Team</p><ul><li><p>~400 team members</p></li><li><p>60+ countries</p></li></ul><p>We move fast.</p>",
+        );
+        assert_eq!(
+            t,
+            "About the Team\n\n• ~400 team members\n\n• 60+ countries\n\nWe move fast."
+        );
     }
 
     #[test]

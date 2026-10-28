@@ -24,7 +24,7 @@ export function SearchForm({ value, onChange }: SearchFormProps) {
         label="Job titles"
         values={value.titles}
         onChange={(v) => set("titles", v)}
-        placeholder="Add a title…"
+        placeholder="Type a title, press Enter…"
         hint="Press Enter to add. Matching titles rank higher."
       />
       <div className="form-row">
@@ -32,14 +32,14 @@ export function SearchForm({ value, onChange }: SearchFormProps) {
           label="Must-have keywords"
           values={value.mustHave}
           onChange={(v) => set("mustHave", v)}
-          placeholder="Add a keyword…"
+          placeholder="Type a keyword, press Enter or comma…"
           hint="Jobs without these are hidden."
         />
         <ChipInput
           label="Keywords to avoid"
           values={value.avoid}
           onChange={(v) => set("avoid", v)}
-          placeholder="Add a keyword…"
+          placeholder="Type a keyword, press Enter or comma…"
           hint="Jobs mentioning these are hidden."
         />
       </div>

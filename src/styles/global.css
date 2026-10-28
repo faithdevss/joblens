@@ -486,6 +486,18 @@ textarea {
   font-size: var(--text-sm);
 }
 
+/* WebKit ignores padding on native selects, so draw our own to match input height */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  line-height: normal;
+  padding-right: 30px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23999' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  cursor: pointer;
+}
+
 textarea {
   resize: vertical;
   line-height: 1.45;
@@ -1070,6 +1082,16 @@ fieldset {
   flex: 1;
 }
 
+.feed[hidden] {
+  display: none;
+}
+
+.feed-more {
+  display: flex;
+  justify-content: center;
+  padding: 12px;
+}
+
 .feed {
   flex: 1;
   display: grid;
@@ -1119,7 +1141,8 @@ fieldset {
 
 .feed-filters select {
   width: auto;
-  padding: 5px 8px;
+  padding: 5px 26px 5px 8px;
+  background-position: right 8px center;
   font-size: 12px;
 }
 
@@ -1407,11 +1430,34 @@ fieldset {
 }
 
 .job-description {
-  white-space: pre-wrap;
   font-size: var(--text-sm);
   line-height: 1.6;
   color: var(--text-soft);
   overflow-wrap: anywhere;
+}
+
+.job-description p,
+.job-description ul {
+  margin: 0 0 10px;
+}
+
+.job-description ul {
+  padding-left: 18px;
+}
+
+.job-description li + li {
+  margin-top: 4px;
+}
+
+.job-description h4 {
+  margin: 18px 0 6px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.job-description h4:first-child {
+  margin-top: 0;
 }
 
 .listing-links {

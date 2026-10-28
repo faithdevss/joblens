@@ -92,7 +92,10 @@ export function ResumeDrop({ resume, profile, onImport }: ResumeDropProps) {
         >
           <Icon name="upload_file" />
           <span className="drop-zone-title">Drop your resume here</span>
-          <span className="drop-zone-sub">PDF or Word (.docx) · stays on this computer</span>
+          <span className="drop-zone-sub">
+            Fills in contact, experience, skills and the rest below · PDF or Word (.docx) · stays on
+            this computer
+          </span>
           <span className="btn btn-secondary">Choose file</span>
         </button>
         {picker}

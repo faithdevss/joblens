@@ -28,6 +28,8 @@ import { ipc } from "../lib/ipc";
 import type { ChangeProfile } from "../lib/useAppData";
 
 type FeedViewProps = {
+  /** False while another view is open; the feed stays mounted so it shows instantly. */
+  active: boolean;
   search: SearchSettings;
   searches: SavedSearch[];
   onSwitchSearch: (id: number) => Promise<void>;
@@ -35,6 +37,9 @@ type FeedViewProps = {
   changeProfile: ChangeProfile;
   onOpenSources: () => void;
 };
+
+/** Rows rendered at first and per "Show more"; long lists are slow to draw all at once. */
+const PAGE_SIZE = 50;
 
 const DEFAULT_WEIGHTS: Weights = { skills: 40, experience: 25, role: 20, seniority: 15 };
 
@@ -46,6 +51,7 @@ const ELIGIBILITY_CHIPS = [
 ] as const;
 
 export function FeedView({
+  active,
   search,
   searches,
   onSwitchSearch,
@@ -86,14 +92,18 @@ export function FeedView({
     }
   }, [load, toast]);
 
+  // Settings may have changed while another view was open, so reload each time it's shown.
   useEffect(() => {
-    load();
+    if (active) load();
+  }, [active, load]);
+
+  useEffect(() => {
     ipc.getWeights().then(setWeights, () => {});
     ipc.getAiSettings().then(
       (s) => setAiOn(s.provider !== null),
       () => {},
     );
-  }, [load]);
+  }, []);
 
   useEffect(() => () => clearTimeout(weightsTimer.current), []);
 
@@ -129,6 +139,9 @@ export function FeedView({
     () => (feed ? applyFilters(feed.jobs, filters, search) : []),
     [feed, filters, search],
   );
+  const [shownCount, setShownCount] = useState(PAGE_SIZE);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: a new filter starts from the top
+  useEffect(() => setShownCount(PAGE_SIZE), [filters, search]);
   const selected = jobs.find((j) => j.id === selectedId) ?? jobs[0] ?? null;
   const sources = useMemo(() => sourceOptions(feed?.jobs ?? []), [feed]);
 
@@ -233,7 +246,7 @@ export function FeedView({
     : { saved: 0, dismissed: 0 };
 
   return (
-    <section className="feed">
+    <section className="feed" hidden={!active}>
       <div className="feed-list-col">
         <div className="feed-head">
           <div className="feed-title-row">
@@ -390,7 +403,7 @@ export function FeedView({
             </p>
           ) : (
             <ul className="job-items" aria-label="Jobs">
-              {jobs.map((j) => (
+              {jobs.slice(0, shownCount).map((j) => (
                 <li key={j.id}>
                   <button
                     type="button"
@@ -422,6 +435,18 @@ export function FeedView({
                   </button>
                 </li>
               ))}
+              {jobs.length > shownCount && (
+                <li className="feed-more">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={() => setShownCount((n) => n + PAGE_SIZE)}
+                  >
+                    Show {Math.min(PAGE_SIZE, jobs.length - shownCount)} more{" "}
+                    <span className="muted">· {jobs.length - shownCount} left</span>
+                  </button>
+                </li>
+              )}
             </ul>
           )}
         </div>

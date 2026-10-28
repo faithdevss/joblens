@@ -1,0 +1,119 @@
+{
+ "apiVersion": "2.2.19",
+ "documentationUrl": "https://jobi.cy/apidocs",
+ "friendlyNotice": "Thanks for using Jobicy API! Please ensure Jobicy is clearly credited with a direct link to the source, and all application buttons redirect to the original job URL provided in this feed. That’s all! You might be building something amazing, we wish you the best of luck!",
+ "jobCount": 5,
+ "lastUpdate": "2026-10-25T04:25:15+00:00",
+ "nextCursor": "AgAAAABq3bGdAAAAAGrc5aMAAAAAAAJkiJGStyjVOt7ULMvdFdHp_0xjGsH--7hP_G6cSgT0AUpIdWDKfn0R3yDsjXkO7IzhBHV0_BypFfArmyVsVdiVD74",
+ "hasMore": true,
+ "appliedFilters": {
+  "count": 100
+ },
+ "jobs": [
+  {
+   "id": 154015,
+   "url": "https://jobicy.com/jobs/154015-support-engineer-i-uk",
+   "jobSlug": "154015-support-engineer-i-uk",
+   "jobTitle": "Support Engineer I - UK",
+   "companyName": "ExtraHop",
+   "companyLogo": "https://jobicy.com/data/server-nyc0409/galaxy/mercury/2025/06/4800f505-221.jpg",
+   "jobIndustry": [
+    "Technical Support"
+   ],
+   "jobType": [
+    "Full-Time"
+   ],
+   "jobGeo": "UK",
+   "jobLevel": "Senior",
+   "jobExcerpt": "At ExtraHop, we’re on a mission to protect and empower the connected enterprise. We reveal what is happening in the very infrastructure that sustains businesses, lives, and communities, and ensure the integrity of networks, data, systems, and processes. Organizations rely on ExtraHop to provide visibility into the cyber threats, vulnerabilities, and network performance issues that&hellip;",
+   "jobDescription": "<p>At <a href=\"https://jobicy.com/company/extrahop\" target=\"_blank\" rel=\"noopener\">ExtraHop</a>, we’re on a mission to protect and empower the connected enterprise. We reveal what is happening in the very infrastructure that sustains businesses, lives, and communities, and ensure the integrity of networks, data, systems, and processes. Organizations rely on ExtraHop to provide visibility into the cyber threats, vulnerabilities, and network performance issues that evade their existing security and IT tools. With this insight, organizations can investigate smarter, stop threats faster, and keep operations running.</p>\n<p>Our mission is fueled by a profound social and moral responsibility to be the best at what we do, ensuring a secure world where everyone can thrive. If this sounds like a place you’d like to spend the next chapter of your career, we’d love to hear from you. </p>\n<p><strong>Position Summary</strong><strong><br></strong>We are looking for a Global Support Engineer I who can support a remote-first, flexible shift schedule. This is a growth role—you will advance your career as a support engineering professional while simultaneously increasing your knowledge and hands-on experience with networking infrastructure as a service. You will regularly support interesting and challenging technical matters and questions and bring clarity to our customers as they leverage our tools to secure their networks in an ever-changing security threat landscape.</p>\n<p><strong>",
+   "pubDate": "2026-10-25T04:25:15+00:00",
+   "salaryMin": 30000,
+   "salaryMax": 35000,
+   "salaryCurrency": "GBP",
+   "salaryPeriod": "yearly"
+  },
+  {
+   "id": 154057,
+   "url": "https://jobicy.com/jobs/154057-technical-accountant",
+   "jobSlug": "154057-technical-accountant",
+   "jobTitle": "Technical Accountant",
+   "companyName": "Kalshi",
+   "companyLogo": "https://jobicy.com/data/server-nyc0409/galaxy/mercury/2025/06/00635b6c-221.png",
+   "jobIndustry": [
+    "Finance & Accounting"
+   ],
+   "jobType": [
+    "Full-Time"
+   ],
+   "jobGeo": "USA",
+   "jobLevel": "Senior",
+   "jobExcerpt": "What We're Up To Kalshi has defined a new category: prediction markets. Kalshi allows people to trade on the outcome of any events and turn any question about the future into a financial asset. Kalshi fought for years and legalized prediction markets in the US for the first time in history. Kalshi is currently the&hellip;",
+   "jobDescription": "<h3><strong>What We're Up To</strong></h3>\r\n<p><a href=\"https://jobicy.com/company/kalshi\" target=\"_blank\" rel=\"noopener\">Kalshi</a> has defined a new category: prediction markets. Kalshi allows people to trade on the outcome of any events and turn any question about the future into a financial asset. Kalshi fought for years and legalized prediction markets in the US for the first time in history. Kalshi is currently the fastest growing financial market in America, and has over 1,900 markets across politics, economics, financials, weather, tech, AI, culture and more.</p>\r\n<p>We believe prediction markets have the potential to be the largest financial market because they turn anything into a financial position. </p>\r\n<ul>\r\n<li>Our vision: well… build the largest financial market on the planet. </li>\r\n<li>Our mission: bring more truth to the world through the power of markets. </li>\r\n</ul>\r\n<p>Building a new category is hard… like, really hard. But it’s <a href=\"https://x.com/Kalshi/status/1853456453886980215\" rel=\"nofollow ugc noopener\" target=\"_blank\">beautiful and deeply fulfilling</a>. Our culture is simple: we hire really talented people, work really hard, and enjoy the climb. We are looking for ambitious and exceptional people to join our (relatively small) team to help us build the next generation of financial markets.</p>\r\n<h3><strong>Role Roadmap</strong></h3>\r\n<p>We’re looking for a seasoned, detail-oriented <strong>Technical Accountant</strong>",
+   "pubDate": "2026-10-25T04:25:11+00:00",
+   "salaryMin": 100000,
+   "salaryMax": 180000,
+   "salaryCurrency": "USD",
+   "salaryPeriod": "yearly"
+  },
+  {
+   "id": 154051,
+   "url": "https://jobicy.com/jobs/154051-staff-software-engineer-curated-data",
+   "jobSlug": "154051-staff-software-engineer-curated-data",
+   "jobTitle": "Staff Software Engineer - Curated Data",
+   "companyName": "Dune",
+   "companyLogo": "https://jobicy.com/data/server-nyc0409/galaxy/mercury/2025/06/9fd6085e-221.png",
+   "jobIndustry": [
+    "Software Engineering"
+   ],
+   "jobType": [
+    "Full-Time"
+   ],
+   "jobGeo": "Europe,  USA",
+   "jobLevel": "Senior",
+   "jobExcerpt": "About Dune Dune's mission is to make onchain finance observable. We're the industry standard for onchain data: a blockchain data and intelligence provider that institutions, protocols, and analysts trust to understand the onchain world and the frontiers of finance. We deliver structured datasets, spanning stablecoins, RWAs, tokens, lending, trading, and more, from 130+ chains and&hellip;",
+   "jobDescription": "<p><strong>About <a href=\"https://jobicy.com/company/dune\" target=\"_blank\" rel=\"noopener\">Dune</a></strong></p>\n<p>Dune's mission is to make onchain finance observable. We're the industry standard for onchain data: a blockchain data and intelligence provider that institutions, protocols, and analysts trust to understand the onchain world and the frontiers of finance. We deliver structured datasets, spanning stablecoins, RWAs, tokens, lending, trading, and more, from 130+ chains and counting, to 1,000+ industry leaders including Visa, WisdomTree, FINRA, the IMF, Bloomberg, Standard Chartered, Coinbase, Forbes, and the Financial Times.</p>\n<p>We're a tight knit team of ~50 hard working people, spread across Europe and eastern US timezones ️, having an outsized impact on the industry. We take pride in being ambitious and doing world class work while staying humble and lighthearted. We believe in building open, verifiable data that lets individuals and institutions do deep research into ecosystems like Ethereum, Solana, Robinhood and many more.</p>\n<p>We're backed by some of the world's best investors. In February 2022, we announced our Series B funding round led by Coatue and Union Square Ventures, an important milestone that let us double down on our mission.</p>\n<p>If you like being challenged and want to work together with a brilliant team on an important mission, come join us.</p>\n<p><strong>Learn more about us:</strong></p>\n<p>Dune's Vision</p>\n<p>",
+   "pubDate": "2026-10-25T04:25:07+00:00"
+  },
+  {
+   "id": 154054,
+   "url": "https://jobicy.com/jobs/154054-payments-lead",
+   "jobSlug": "154054-payments-lead",
+   "jobTitle": "Payments Lead",
+   "companyName": "Kalshi",
+   "companyLogo": "https://jobicy.com/data/server-nyc0409/galaxy/mercury/2025/06/00635b6c-221.png",
+   "jobIndustry": [
+    "Product & Operations"
+   ],
+   "jobType": [
+    "Full-Time"
+   ],
+   "jobGeo": "USA",
+   "jobLevel": "Senior",
+   "jobExcerpt": "Kalshi is defining a new category Kalshi has defined a new category: prediction markets. Kalshi allows people to trade on the outcome of any events and turn any question about the future into a financial asset. Kalshi fought for years and legalized prediction markets in the US for the first time in history. Kalshi is&hellip;",
+   "jobDescription": "<h3><a href=\"https://jobicy.com/company/kalshi\" target=\"_blank\" rel=\"noopener\">Kalshi</a> is defining a new category</h3>\n<p>Kalshi has defined a new category: prediction markets. Kalshi allows people to trade on the outcome of any events and turn any question about the future into a financial asset. Kalshi fought for years and legalized prediction markets in the US for the first time in history. Kalshi is currently the fastest growing financial market in America, and has thousands of markets across politics, economics, financials, weather, tech, AI, culture and more.</p>\n<p>We believe prediction markets have the potential to be the largest financial market because they turn anything into a financial position. </p>\n<ul>\n<li>Our vision: well… build the largest financial market on the planet. </li>\n<li>Our mission: bring more truth to the world through the power of markets. </li>\n</ul>\n<p>Building a new category is hard… like really hard. But it’s <a href=\"https://x.com/Kalshi/status/1853456453886980215\" rel=\"nofollow ugc noopener\" target=\"_blank\">beautiful and deeply fulfilling</a>. Our culture is simple: we hire really talented people, work really hard, and enjoy the climb. We are looking for ambitious and exceptional people to join our (relatively small) team to help us build the next generation of financial markets.</p>\n<h3><strong>About the Role</strong></h3>\n<p>",
+   "pubDate": "2026-10-25T04:20:25+00:00"
+  },
+  {
+   "id": 154053,
+   "url": "https://jobicy.com/jobs/154053-business-travel-consultant-english-remote-portugal",
+   "jobSlug": "154053-business-travel-consultant-english-remote-portugal",
+   "jobTitle": "Business Travel Consultant - English - Remote Portugal",
+   "companyName": "TripActions",
+   "companyLogo": "https://jobicy.com/data/server-nyc0409/galaxy/mercury/2025/06/950bf607-221.jpg",
+   "jobIndustry": [
+    "Customer Support & Success"
+   ],
+   "jobType": [
+    "Full-Time"
+   ],
+   "jobGeo": "Portugal",
+   "jobLevel": "Any",
+   "jobExcerpt": "Join Navan in Powering In-Person Connections with Relentless Innovation At Navan, our mission is to make travel seamless and empowering, so travelers can focus on being there, not getting there. Our Travel Experience team is at the heart of this mission! As a key member of our fast-growing Travel Experience team, you'll support our users’&hellip;",
+   "jobDescription": "<p><strong>Join Navan in Powering In-Person Connections with Relentless Innovation</strong></p>\n<p>At Navan, our mission is to make travel seamless and empowering, so travelers can focus on being there, not getting there. Our Travel Experience team is at the heart of this mission!</p>\n<p>As a key member of our fast-growing Travel Experience team, you'll support our users’ travel needs directly. You’ll take ownership of customer satisfaction by resolving issues, communicating effectively, and collaborating with internal teams to clear any obstacles for travelers — all while delivering an exceptional customer experience. As our frontline, you’ll provide valuable feedback to our product, design, and engineering teams to enhance our customer-facing and internal platforms. This exciting role allows you to impact daily operations, traveler experiences, and product development directly.</p>\n<p><strong>NOTE: Candidates must reside in Portugal for consideration, or willing to relocate. Please submit all applications in English.</strong></p>\n<p><strong>What You’ll Do:</strong></p>\n<ul>\n<li>Provide top-tier travel support via chat, calls, and emails</li>\n<li>Maintain up-to-date knowledge on suppliers, destinations, and systems</li>\n<li>Quickly assess customer needs, urgency, and preferences</li>\n<li>Accurately handle hotel, flight, car, and rail bookings</li>\n<li>Guide customers in self-service options on the Navan platform and app</li>\n<li>",
+   "pubDate": "2026-10-25T04:20:23+00:00"
+  }
+ ],
+ "statusCode": 200,
+ "success": true
+}

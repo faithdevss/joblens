@@ -3,6 +3,7 @@ import { job, sampleJobs } from "../test/fixtures";
 import {
   applyFilters,
   DEFAULT_FILTERS,
+  descriptionBlocks,
   formatAge,
   meetsMinimum,
   refreshSummary,
@@ -130,5 +131,35 @@ describe("feed text", () => {
       }),
     ).toMatch(/^Already up to date\. Next check from /);
     expect(refreshSummary({ runs: [] })).toBe("No sources are turned on.");
+  });
+
+  it("turns a flattened posting into headings, paragraphs and lists", () => {
+    const text = [
+      "About the Team",
+      "",
+      "Supabase was born-remote.",
+      "",
+      "•",
+      "",
+      "~400 team members",
+      "",
+      "•",
+      "",
+      "60+ countries",
+      "",
+      "Requirements:",
+      "- Rust",
+      "- Postgres",
+      "",
+      "We move fast",
+    ].join("\n");
+    expect(descriptionBlocks(text)).toEqual([
+      { kind: "heading", text: "About the Team" },
+      { kind: "paragraph", text: "Supabase was born-remote." },
+      { kind: "list", items: ["~400 team members", "60+ countries"] },
+      { kind: "heading", text: "Requirements" },
+      { kind: "list", items: ["Rust", "Postgres"] },
+      { kind: "paragraph", text: "We move fast" },
+    ]);
   });
 });
